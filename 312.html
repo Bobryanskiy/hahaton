@@ -930,6 +930,22 @@
             line-height: 1.5;
         }
 
+        /* Стили поля ввода */
+        .sport-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .sport-input:focus {
+            border-color: #0056b3;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.2);
+        }
+
         /* Стили выпадающего списка */
         .sport-listbox {
             position: absolute;
@@ -967,7 +983,8 @@
 
         /* Стиль для выбранного/активного элемента (важно для визуалов и контекста) */
         .sport-option:hover,
-        .sport-option[aria-selected="true"] {
+        .sport-option[aria-selected="true"],
+        .sport-option.active {
             background-color: #eef6ff;
             color: #053569;
         }
@@ -1725,7 +1742,7 @@
                                     <input 
                                         type="text" 
                                         id="filter-sport" 
-                                        class="form-input" 
+                                        class="sport-input" 
                                         placeholder="Введите название спорта" 
                                         role="combobox" 
                                         aria-expanded="false" 
@@ -1744,11 +1761,11 @@
                                     </ul>
                             </div>
                             <div class="form-group" style="flex: 1; min-width: 200px; position: relative;">
-                                <label for="form-region">Место проведения</label>
+                                <label for="filter-region">Место проведения</label>
                                 <input 
                                     type="text" 
-                                    id="form-region" 
-                                    class="form-select"
+                                    id="filter-region" 
+                                    class="sport-input" 
                                     placeholder="Введите место проведения" 
                                     role="combobox" 
                                     aria-expanded="false" 
@@ -1805,7 +1822,7 @@
                 <!-- Events List -->
                 <div class="events-list" id="events-list" role="list" aria-label="Список мероприятий">
                     <!-- Event 1 -->
-                    <article class="event-card" role="listitem">
+                    <article class="event-card" role="listitem" data-sport="Тхэквондо ИТФ" data-date-start="2026-04-19" data-date-end="2026-04-25" data-region="Греция">
                         <div class="event-top">
                             <span class="event-badge sport" aria-label="Тип мероприятия: спортивное">Спортивные</span>
                             <span class="event-ekp" aria-label="Номер ЕКП: 2102000014054894">№ ЕКП 2102000014054894</span>
@@ -1837,7 +1854,7 @@
                     </article>
 
                     <!-- Event 2 -->
-                    <article class="event-card" role="listitem">
+                    <article class="event-card" role="listitem" data-sport="Спорт глухих" data-date-start="2026-04-24" data-date-end="2026-05-05" data-region="Республика Крым">
                         <div class="event-top">
                             <span class="event-badge sport" aria-label="Тип мероприятия: спортивное">Спортивные</span>
                             <span class="event-ekp" aria-label="Номер ЕКП: 2114910024052587">№ ЕКП 2114910024052587</span>
@@ -1869,7 +1886,7 @@
                     </article>
 
                     <!-- Event 3 -->
-                    <article class="event-card fizkultura" role="listitem">
+                    <article class="event-card fizkultura" role="listitem" data-sport="Баскетбол" data-date-start="2026-04-15" data-date-end="2026-04-20" data-region="Воронежская область">
                         <div class="event-top">
                             <span class="event-badge fizkultura" aria-label="Тип мероприятия: физкультурное">Физкультурные</span>
                             <span class="event-ekp" aria-label="Номер ЕКП: 1014340001005147">№ ЕКП 1014340001005147</span>
@@ -1901,7 +1918,7 @@
                     </article>
 
                     <!-- Event 4 -->
-                    <article class="event-card" role="listitem">
+                    <article class="event-card" role="listitem" data-sport="Восточное боевое единоборство" data-date-start="2026-04-24" data-date-end="2026-04-27" data-region="Ростовская область">
                         <div class="event-top">
                             <span class="event-badge sport" aria-label="Тип мероприятия: спортивное">Спортивные</span>
                             <span class="event-ekp" aria-label="Номер ЕКП: 2118610017045329">№ ЕКП 2118610017045329</span>
@@ -1933,7 +1950,7 @@
                     </article>
 
                     <!-- Event 5 -->
-                    <article class="event-card" role="listitem">
+                    <article class="event-card" role="listitem" data-sport="Радиоспорт" data-date-start="2026-04-25" data-date-end="2026-04-25" data-region="Липецкая область">
                         <div class="event-top">
                             <span class="event-badge sport" aria-label="Тип мероприятия: спортивное">Спортивные</span>
                             <span class="event-ekp" aria-label="Номер ЕКП: 2145000017053258">№ ЕКП 2145000017053258</span>
@@ -2170,8 +2187,8 @@
             e.preventDefault();
             
             var type = document.getElementById('filter-type').value;
-            var sport = document.getElementById('filter-sport').value;
-            var region = document.getElementById('filter-region').value;
+            var sport = document.getElementById('filter-sport').value.trim();
+            var region = document.getElementById('filter-region').value.trim();
             var dateFrom = document.getElementById('filter-date-from').value;
             var dateTo = document.getElementById('filter-date-to').value;
             
@@ -2181,17 +2198,8 @@
                 filters.push(type === 'sport' ? 'спортивные' : 'физкультурные');
             }
             if (sport) filters.push('вид спорта: ' + sport);
-            if (region !== 'all') {
-                var regionNames = {
-                    'greece': 'Греция',
-                    'crimea': 'Республика Крым',
-                    'krasnodar': 'Краснодарский край',
-                    'rostov': 'Ростовская область',
-                    'lipetsk': 'Липецкая область',
-                    'novosibirsk': 'Новосибирская область',
-                    'voronezh': 'Воронежская область'
-                };
-                filters.push('регион: ' + (regionNames[region] || region));
+            if (region) {
+                filters.push('регион: ' + region);
             }
             if (dateFrom && dateTo) {
                 filters.push('даты: ' + formatDate(dateFrom) + ' — ' + formatDate(dateTo));
@@ -2213,14 +2221,34 @@
                 var isSport = badge && badge.classList.contains('sport');
                 var isFizkultura = badge && badge.classList.contains('fizkultura');
                 
+                // Получаем данные из data-атрибутов
+                var cardSport = card.getAttribute('data-sport') || '';
+                var cardDateStart = card.getAttribute('data-date-start') || '';
+                var cardDateEnd = card.getAttribute('data-date-end') || '';
+                var cardRegion = card.getAttribute('data-region') || '';
+                
                 var show = true;
                 
+                // Фильтр по типу мероприятия
                 if (type === 'sport' && !isSport) show = false;
                 if (type === 'fizkultura' && !isFizkultura) show = false;
                 
-                if (sport) {
-                    var cardText = card.textContent.toLowerCase();
-                    if (cardText.indexOf(sport.toLowerCase()) === -1) show = false;
+                // Фильтр по виду спорта (точное совпадение)
+                if (sport && cardSport.toLowerCase() !== sport.toLowerCase()) {
+                    show = false;
+                }
+                
+                // Фильтр по региону (частичное совпадение)
+                if (region && cardRegion.toLowerCase().indexOf(region.toLowerCase()) === -1) {
+                    show = false;
+                }
+                
+                // Фильтр по датам
+                if (dateFrom && cardDateEnd && cardDateEnd < dateFrom) {
+                    show = false;
+                }
+                if (dateTo && cardDateStart && cardDateStart > dateTo) {
+                    show = false;
                 }
                 
                 card.style.display = show ? '' : 'none';
@@ -2234,7 +2262,7 @@
         function resetFilters() {
             document.getElementById('filter-type').value = 'all';
             document.getElementById('filter-sport').value = '';
-            document.getElementById('filter-region').value = 'all';
+            document.getElementById('filter-region').value = '';
             document.getElementById('filter-date-from').value = '2026-04-01';
             document.getElementById('filter-date-to').value = '2026-04-30';
             
@@ -2419,122 +2447,10 @@
             });
         }
 
-        function initCombobox(inputId, listboxId, dataArray) {
-            const input = document.getElementById(inputId);
-            const listbox = document.getElementById(listboxId);
-            let activeOptionIndex = -1;
-
-            function filterOptions(query) {
-                listbox.innerHTML = '';
-                activeOptionIndex = -1;
-
-                if (!query) {
-                    closeList();
-                    return;
-                }
-
-                const filtered = dataArray.filter(item => 
-                    item.toLowerCase().includes(query.toLowerCase())
-                );
-
-                if (filtered.length === 0) {
-                    const li = document.createElement('li');
-                    li.className = 'no-results';
-                    li.textContent = 'Ничего не найдено';
-                    li.setAttribute('role', 'presentation');
-                    listbox.appendChild(li);
-                    openList();
-                    return;
-                }
-
-                filtered.forEach((item, index) => {
-                    const li = document.createElement('li');
-                    li.className = 'sport-option';
-                    li.textContent = item;
-                    li.setAttribute('role', 'option');
-                    li.setAttribute('id', `${inputId}-opt-${index}`);
-                    li.setAttribute('aria-selected', 'false');
-                    li.addEventListener('click', () => selectOption(item));
-                    listbox.appendChild(li);
-                });
-
-                openList();
-            }
-
-            function openList() {
-                listbox.style.display = 'block';
-                input.setAttribute('aria-expanded', 'true');
-            }
-
-            function closeList() {
-                listbox.style.display = 'none';
-                input.setAttribute('aria-expanded', 'false');
-                activeOptionIndex = -1;
-            }
-
-            function selectOption(value) {
-                input.value = value;
-                closeList();
-                input.focus();
-            }
-
-            input.addEventListener('input', (e) => {
-                filterOptions(e.target.value);
-            });
-
-            input.addEventListener('keydown', (e) => {
-                const options = listbox.querySelectorAll('[role="option"]');
-                if (options.length === 0) return;
-
-                if (e.key === 'ArrowDown') {
-                    e.preventDefault();
-                    activeOptionIndex++;
-                    if (activeOptionIndex >= options.length) activeOptionIndex = 0;
-                    updateActiveOption(options);
-                } else if (e.key === 'ArrowUp') {
-                    e.preventDefault();
-                    activeOptionIndex--;
-                    if (activeOptionIndex < 0) activeOptionIndex = options.length - 1;
-                    updateActiveOption(options);
-                } else if (e.key === 'Enter') {
-                    e.preventDefault();
-                    if (activeOptionIndex !== -1 && options[activeOptionIndex]) {
-                        selectOption(options[activeOptionIndex].textContent);
-                    } else if (options.length > 0) {
-                        selectOption(options[0].textContent);
-                    }
-                } else if (e.key === 'Escape') {
-                    closeList();
-                }
-            });
-
-            function updateActiveOption(options) {
-                options.forEach((opt, idx) => {
-                    if (idx === activeOptionIndex) {
-                        opt.setAttribute('aria-selected', 'true');
-                        opt.classList.add('active');
-                        opt.scrollIntoView({ block: 'nearest' });
-                        input.setAttribute('aria-activedescendant', opt.id);
-                    } else {
-                        opt.setAttribute('aria-selected', 'false');
-                        opt.classList.remove('active');
-                    }
-                });
-            }
-
-            document.addEventListener('click', (e) => {
-                if (!e.target.closest(`#${inputId}`).parentNode) {
-                    closeList();
-                }
-            });
-        }
-
         // ===== INIT =====
         document.addEventListener('DOMContentLoaded', function() {
             animateCounters();
             renderCalendar();
-            initCombobox('filter-sport', 'sport-listbox', sports);
-            initCombobox('filter-region', 'region-listbox', regions);
             
             // Announce page load
             setTimeout(function() {
@@ -2628,76 +2544,6 @@
             });
         });
 
-        // ===== AUTOCOMPLETE =====
-        const sportList = [
-            'Футбол', 'Баскетбол', 'Волейбол', 'Хоккей', 'Теннис', 'Плавание',
-            'Лёгкая атлетика', 'Борьба', 'Бокс', 'Дзюдо', 'Карате', 'Тхэквондо',
-            'Гимнастика', 'Фигурное катание', 'Лыжные гонки', 'Биатлон',
-            'Велоспорт', 'Автоспорт', 'Гребля', 'Парусный спорт'
-        ];
-        function initAutocomplete() {
-            const input = document.getElementById('filter-sport');
-            const dropdown = document.getElementById('sport-autocomplete');
-            if (!input || !dropdown) return;
-            input.addEventListener('input', function () {
-                const value = this.value.toLowerCase();
-                if (value.length < 1) {
-                    dropdown.classList.remove('active');
-                    return;
-                }
-                const matches = sportList.filter(sport =>
-                    sport.toLowerCase().includes(value)
-                );
-                if (matches.length > 0) {
-                    dropdown.innerHTML = matches.map(sport =>
-                        '<div class="autocomplete-item" role="option" tabindex="-1" onclick="selectSport(\'' + sport + '\')">' + sport + '</div>'
-                    ).join('');
-                    dropdown.classList.add('active');
-                } else {
-                    dropdown.classList.remove('active');
-                }
-            });
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function (e) {
-                if (!input.contains(e.target) && !dropdown.contains(e.target)) {
-                    dropdown.classList.remove('active');
-                }
-            });
-            // Keyboard navigation
-            input.addEventListener('keydown', function (e) {
-                const items = dropdown.querySelectorAll('.autocomplete-item');
-                const activeItem = dropdown.querySelector('.autocomplete-item.active');
-                let index = Array.from(items).indexOf(activeItem);
-                if (e.key === 'ArrowDown') {
-                    e.preventDefault();
-                    if (index < items.length - 1) {
-                        if (activeItem) activeItem.classList.remove('active');
-                        items[index + 1].classList.add('active');
-                        items[index + 1].scrollIntoView({ block: 'nearest' });
-                    }
-                } else if (e.key === 'ArrowUp') {
-                    e.preventDefault();
-                    if (index > 0) {
-                        if (activeItem) activeItem.classList.remove('active');
-                        items[index - 1].classList.add('active');
-                        items[index - 1].scrollIntoView({ block: 'nearest' });
-                    }
-                } else if (e.key === 'Enter') {
-                    e.preventDefault();
-                    if (activeItem) {
-                        selectSport(activeItem.textContent);
-                    }
-                } else if (e.key === 'Escape') {
-                    dropdown.classList.remove('active');
-                }
-            });
-        }
-        function selectSport(sport) {
-            document.getElementById('filter-sport').value = sport;
-            document.getElementById('sport-autocomplete').classList.remove('active');
-            announce('Выбран вид спорта: ' + sport);
-        }
-
         // ===== SITE SEARCH =====
         function performSearch() {
             const searchInput = document.getElementById('site-search');
@@ -2723,160 +2569,265 @@
                     }
                 });
             }
-        });
 
-        const sports = [
-            "Акробатический рок-н-ролл", "Альпинизм", "Армрестлинг", "Бадминтон", 
-            "Баскетбол", "Биатлон", "Бильярдный спорт", "Бобслей", "Бокс", 
-            "Борьба (все виды)", "Велосипедный спорт", "Воднолыжный спорт", 
-            "Волейбол (включая пляжный)", "Гандбол", "Гиревой спорт", 
-            "Городошный спорт", "Гребля на байдарках и каноэ", "Гребной спорт", 
-            "Дзюдо", "Зимнее плавание", "Конный спорт", "Компьютерный спорт (киберспорт)", 
-            "Конькобежный спорт", "Легкая атлетика", "Лыжные гонки", "Лыжное двоеборье", 
-            "Парусный спорт", "Плавание", "Подводный спорт", "Полиатлон", 
-            "Пулевая стрельба", "Радиоспорт", "Регби", "Роллер спорт", 
-            "Рукопашный бой", "Самбо", "Скелетон", "Сноуборд", "Спортивная аэробика", 
-            "Спортивная акробатика", "Спортивная гимнастика", "Спортивное ориентирование", 
-            "Стендовая стрельба", "Стрельба из лука", "Танцевальный спорт", 
-            "Теннис (настольный и большой)", "Триатлон", "Тхэквондо ИТФ", 
-            "Тяжелая атлетика", "Фехтование", "Футбол", "Хоккей (все виды)", 
-            "Художественная гимнастика", "Шахматы", "Шашки", "Силовой экстрим", 
-            "Фиджитал спорт", "Функциональное многоборье", "Чирлидинг", 
-            "Спорт глухих", "Восточное боевое единоборство", "Карате", 
-            "Кикбоксинг", "Ушу", "Скалолазание", "Горнолыжный спорт", 
-            "Керлинг", "Пауэрлифтинг", "Брейк-данс", "Гольф", "Петанк", 
-            "Прыжки в воду", "Прыжки на батуте", "Синхронное плавание", 
-            "Современное пятиборье", "Фигурное катание", "Фитнес", "Фристайл", 
-            "Шорт-трек"
-        ];
+            // ===== AUTOCOMPLETE FOR SPORT =====
+            const sports = [
+                "Акробатический рок-н-ролл", "Альпинизм", "Армрестлинг", "Бадминтон", 
+                "Баскетбол", "Биатлон", "Бильярдный спорт", "Бобслей", "Бокс", 
+                "Борьба (все виды)", "Велосипедный спорт", "Воднолыжный спорт", 
+                "Волейбол (включая пляжный)", "Гандбол", "Гиревой спорт", 
+                "Городошный спорт", "Гребля на байдарках и каноэ", "Гребной спорт", 
+                "Дзюдо", "Зимнее плавание", "Конный спорт", "Компьютерный спорт (киберспорт)", 
+                "Конькобежный спорт", "Легкая атлетика", "Лыжные гонки", "Лыжное двоеборье", 
+                "Парусный спорт", "Плавание", "Подводный спорт", "Полиатлон", 
+                "Пулевая стрельба", "Радиоспорт", "Регби", "Роллер спорт", 
+                "Рукопашный бой", "Самбо", "Скелетон", "Сноуборд", "Спортивная аэробика", 
+                "Спортивная акробатика", "Спортивная гимнастика", "Спортивное ориентирование", 
+                "Стендовая стрельба", "Стрельба из лука", "Танцевальный спорт", 
+                "Теннис (настольный и большой)", "Триатлон", "Тхэквондо ИТФ", 
+                "Тяжелая атлетика", "Фехтование", "Футбол", "Хоккей (все виды)", 
+                "Художественная гимнастика", "Шахматы", "Шашки", "Силовой экстрим", 
+                "Фиджитал спорт", "Функциональное многоборье", "Чирлидинг", 
+                "Спорт глухих", "Восточное боевое единоборство", "Карате", 
+                "Кикбоксинг", "Ушу", "Скалолазание", "Горнолыжный спорт", 
+                "Керлинг", "Пауэрлифтинг", "Брейк-данс", "Гольф", "Петанк", 
+                "Прыжки в воду", "Прыжки на батуте", "Синхронное плавание", 
+                "Современное пятиборье", "Фигурное катание", "Фитнес", "Фристайл", 
+                "Шорт-трек"
+            ];
 
-        const regions = [
-            "Все регионы",
-            "Греция",
-            "Республика Крым",
-            "Краснодарский край",
-            "Ростовская область",
-            "Липецкая область",
-            "Новосибирская область",
-            "Воронежская область",
-            "Воронежская, Волгоградская область",
-            "По месту нахождения участников",
-            "Москва",
-            "Санкт-Петербург",
-            "Московская область",
-            "Свердловская область",
-            "Челябинская область",
-            "Татарстан",
-            "Башкортостан",
-            "Дагестан",
-            "Чечня",
-            "Ингушетия",
-            "Кабардино-Балкария",
-            "Карачаево-Черкесия",
-            "Северная Осетия",
-            "Адыгея",
-            "Калмыкия",
-            "Марий Эл",
-            "Мордовия",
-            "Удмуртия",
-            "Чувашия",
-            "Якутия",
-            "Хакасия",
-            "Тыва",
-            "Алтай",
-            "Бурятия",
-            "Забайкальский край",
-            "Приморский край",
-            "Хабаровский край",
-            "Амурская область",
-            "Сахалинская область",
-            "Магаданская область",
-            "Камчатский край",
-            "Иркутская область",
-            "Омская область",
-            "Томская область",
-            "Новосибирская область",
-            "Кемеровская область",
-            "Алтайский край",
-            "Красноярский край",
-            "Пермский край",
-            "Уральский ФО",
-            "Сибирский ФО",
-            "Дальневосточный ФО",
-            "Южный ФО",
-            "Северо-Кавказский ФО",
-            "Приволжский ФО",
-            "Центральный ФО",
-            "Северо-Западный ФО"
-        ];
-
-        const input = document.getElementById('filter-sport');
-        const listbox = document.getElementById('sport-listbox');
-        let activeOptionIndex = -1; // Индекс текущего выбранного элемента в списке
-
-        // Функция фильтрации и отображения списка
-        function filterSports(query) {
-            listbox.innerHTML = ''; // Очищаем список
-            activeOptionIndex = -1; // Сбрасываем навигацию
+            const sportInput = document.getElementById('filter-sport');
+            const sportListbox = document.getElementById('sport-listbox');
             
-            if (!query) {
-                closeList();
-                return;
+            if (sportInput && sportListbox) {
+                let activeOptionIndex = -1;
+
+                function filterSports(query) {
+                    sportListbox.innerHTML = '';
+                    activeOptionIndex = -1;
+                    
+                    if (!query) {
+                        closeSportList();
+                        return;
+                    }
+
+                    const filtered = sports.filter(sport => 
+                        sport.toLowerCase().includes(query.toLowerCase())
+                    );
+
+                    if (filtered.length === 0) {
+                        const li = document.createElement('li');
+                        li.className = 'no-results';
+                        li.textContent = 'Ничего не найдено';
+                        li.setAttribute('role', 'presentation');
+                        sportListbox.appendChild(li);
+                        openSportList();
+                        return;
+                    }
+
+                    filtered.forEach((sport, index) => {
+                        const li = document.createElement('li');
+                        li.className = 'sport-option';
+                        li.textContent = sport;
+                        li.setAttribute('role', 'option');
+                        li.setAttribute('id', `sport-opt-${index}`);
+                        li.setAttribute('aria-selected', 'false');
+                        li.addEventListener('click', () => selectSportFromList(sport));
+                        sportListbox.appendChild(li);
+                    });
+
+                    openSportList();
+                }
+
+                function openSportList() {
+                    sportListbox.setAttribute('aria-hidden', 'false');
+                    sportInput.setAttribute('aria-expanded', 'true');
+                }
+
+                function closeSportList() {
+                    sportListbox.setAttribute('aria-hidden', 'true');
+                    sportInput.setAttribute('aria-expanded', 'false');
+                    activeOptionIndex = -1;
+                }
+
+                function selectSportFromList(sportName) {
+                    sportInput.value = sportName;
+                    closeSportList();
+                    sportInput.focus();
+                }
+
+                sportInput.addEventListener('input', (e) => {
+                    filterSports(e.target.value);
+                });
+
+                sportInput.addEventListener('keydown', (e) => {
+                    const items = sportListbox.querySelectorAll('.sport-option');
+                    if (e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        if (activeOptionIndex < items.length - 1) {
+                            activeOptionIndex++;
+                            items.forEach(item => item.classList.remove('active'));
+                            if (items[activeOptionIndex]) {
+                                items[activeOptionIndex].classList.add('active');
+                                items[activeOptionIndex].scrollIntoView({ block: 'nearest' });
+                            }
+                        }
+                    } else if (e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        if (activeOptionIndex > 0) {
+                            activeOptionIndex--;
+                            items.forEach(item => item.classList.remove('active'));
+                            if (items[activeOptionIndex]) {
+                                items[activeOptionIndex].classList.add('active');
+                                items[activeOptionIndex].scrollIntoView({ block: 'nearest' });
+                            }
+                        }
+                    } else if (e.key === 'Enter') {
+                        e.preventDefault();
+                        if (activeOptionIndex >= 0 && items[activeOptionIndex]) {
+                            selectSportFromList(items[activeOptionIndex].textContent);
+                        }
+                    } else if (e.key === 'Escape') {
+                        closeSportList();
+                    }
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!sportInput.contains(e.target) && !sportListbox.contains(e.target)) {
+                        closeSportList();
+                    }
+                });
             }
 
-            const filtered = sports.filter(sport => 
-                sport.toLowerCase().includes(query.toLowerCase())
-            );
+            // ===== AUTOCOMPLETE FOR REGION =====
+            const regions = [
+                "Республика Адыгея", "Республика Алтай", "Республика Башкортостан", "Республика Бурятия",
+                "Республика Дагестан", "Республика Ингушетия", "Кабардино-Балкарская Республика",
+                "Республика Калмыкия", "Карачаево-Черкесская Республика", "Республика Карелия",
+                "Республика Коми", "Республика Крым", "Республика Марий Эл", "Республика Мордовия",
+                "Республика Саха (Якутия)", "Республика Северная Осетия — Алания", "Республика Татарстан",
+                "Республика Тыва", "Удмуртская Республика", "Республика Хакасия", "Чеченская Республика",
+                "Чувашская Республика", "Алтайский край", "Забайкальский край", "Камчатский край",
+                "Краснодарский край", "Красноярский край", "Пермский край", "Приморский край",
+                "Ставропольский край", "Хабаровский край", "Амурская область", "Архангельская область",
+                "Астраханская область", "Белгородская область", "Брянская область", "Владимирская область",
+                "Волгоградская область", "Вологодская область", "Воронежская область", "Ивановская область",
+                "Иркутская область", "Калининградская область", "Калужская область", "Кемеровская область",
+                "Кировская область", "Костромская область", "Курганская область", "Курская область",
+                "Ленинградская область", "Липецкая область", "Магаданская область", "Московская область",
+                "Мурманская область", "Нижегородская область", "Новгородская область", "Новосибирская область",
+                "Омская область", "Оренбургская область", "Орловская область", "Пензенская область",
+                "Псковская область", "Ростовская область", "Рязанская область", "Самарская область",
+                "Саратовская область", "Сахалинская область", "Свердловская область", "Смоленская область",
+                "Тамбовская область", "Тверская область", "Томская область", "Тульская область",
+                "Тюменская область", "Ульяновская область", "Челябинская область", "Ярославская область",
+                "Москва", "Санкт-Петербург", "Севастополь", "Еврейская автономная область",
+                "Ненецкий автономный округ", "Ханты-Мансийский автономный округ — Югра",
+                "Чукотский автономный округ", "Ямало-Ненецкий автономный округ", "Греция"
+            ];
 
-            if (filtered.length === 0) {
-                const li = document.createElement('li');
-                li.className = 'no-results';
-                li.textContent = 'Ничего не найдено';
-                li.setAttribute('role', 'presentation'); // Не является опцией выбора
-                listbox.appendChild(li);
-                openList();
-                return;
+            const regionInput = document.getElementById('filter-region');
+            const regionListbox = document.getElementById('region-listbox');
+            
+            if (regionInput && regionListbox) {
+                let activeRegionIndex = -1;
+
+                function filterRegions(query) {
+                    regionListbox.innerHTML = '';
+                    activeRegionIndex = -1;
+                    
+                    if (!query) {
+                        closeRegionList();
+                        return;
+                    }
+
+                    const filtered = regions.filter(region => 
+                        region.toLowerCase().includes(query.toLowerCase())
+                    );
+
+                    if (filtered.length === 0) {
+                        const li = document.createElement('li');
+                        li.className = 'no-results';
+                        li.textContent = 'Ничего не найдено';
+                        li.setAttribute('role', 'presentation');
+                        regionListbox.appendChild(li);
+                        openRegionList();
+                        return;
+                    }
+
+                    filtered.forEach((region, index) => {
+                        const li = document.createElement('li');
+                        li.className = 'sport-option';
+                        li.textContent = region;
+                        li.setAttribute('role', 'option');
+                        li.setAttribute('id', `region-opt-${index}`);
+                        li.setAttribute('aria-selected', 'false');
+                        li.addEventListener('click', () => selectRegionFromList(region));
+                        regionListbox.appendChild(li);
+                    });
+
+                    openRegionList();
+                }
+
+                function openRegionList() {
+                    regionListbox.setAttribute('aria-hidden', 'false');
+                    regionInput.setAttribute('aria-expanded', 'true');
+                }
+
+                function closeRegionList() {
+                    regionListbox.setAttribute('aria-hidden', 'true');
+                    regionInput.setAttribute('aria-expanded', 'false');
+                    activeRegionIndex = -1;
+                }
+
+                function selectRegionFromList(regionName) {
+                    regionInput.value = regionName;
+                    closeRegionList();
+                    regionInput.focus();
+                }
+
+                regionInput.addEventListener('input', (e) => {
+                    filterRegions(e.target.value);
+                });
+
+                regionInput.addEventListener('keydown', (e) => {
+                    const items = regionListbox.querySelectorAll('.sport-option');
+                    if (e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        if (activeRegionIndex < items.length - 1) {
+                            activeRegionIndex++;
+                            items.forEach(item => item.classList.remove('active'));
+                            if (items[activeRegionIndex]) {
+                                items[activeRegionIndex].classList.add('active');
+                                items[activeRegionIndex].scrollIntoView({ block: 'nearest' });
+                            }
+                        }
+                    } else if (e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        if (activeRegionIndex > 0) {
+                            activeRegionIndex--;
+                            items.forEach(item => item.classList.remove('active'));
+                            if (items[activeRegionIndex]) {
+                                items[activeRegionIndex].classList.add('active');
+                                items[activeRegionIndex].scrollIntoView({ block: 'nearest' });
+                            }
+                        }
+                    } else if (e.key === 'Enter') {
+                        e.preventDefault();
+                        if (activeRegionIndex >= 0 && items[activeRegionIndex]) {
+                            selectRegionFromList(items[activeRegionIndex].textContent);
+                        }
+                    } else if (e.key === 'Escape') {
+                        closeRegionList();
+                    }
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!regionInput.contains(e.target) && !regionListbox.contains(e.target)) {
+                        closeRegionList();
+                    }
+                });
             }
-
-            filtered.forEach((sport, index) => {
-                const li = document.createElement('li');
-                li.className = 'sport-option';
-                li.textContent = sport;
-                
-                // Ключевые атрибуты для доступности
-                li.setAttribute('role', 'option');
-                li.setAttribute('id', `sport-opt-${index}`); // Уникальный ID для связи
-                li.setAttribute('aria-selected', 'false');
-                
-                // Клик мышкой тоже должен работать
-                li.addEventListener('click', () => selectSport(sport));
-                
-                listbox.appendChild(li);
-            });
-
-            openList();
-        }
-
-        function openList() {
-            listbox.setAttribute('aria-hidden', 'false');
-            input.setAttribute('aria-expanded', 'true');
-        }
-
-        function closeList() {
-            listbox.setAttribute('aria-hidden', 'true');
-            input.setAttribute('aria-expanded', 'false');
-            activeOptionIndex = -1;
-        }
-
-        function selectSport(sportName) {
-            input.value = sportName;
-            closeList();
-            input.focus(); // Возвращаем фокус в поле ввода
-        }
-
-        // Обработчик ввода текста
-        input.addEventListener('input', (e) => {
-            filterSports(e.target.value);
         });
     </script>
 </body>
