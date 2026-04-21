@@ -930,22 +930,6 @@
             line-height: 1.5;
         }
 
-        /* Стили поля ввода */
-        .sport-input {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-
-        .sport-input:focus {
-            border-color: #0056b3;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.2);
-        }
-
         /* Стили выпадающего списка */
         .sport-listbox {
             position: absolute;
@@ -1741,7 +1725,7 @@
                                     <input 
                                         type="text" 
                                         id="filter-sport" 
-                                        class="sport-input" 
+                                        class="form-input" 
                                         placeholder="Введите название спорта" 
                                         role="combobox" 
                                         aria-expanded="false" 
@@ -1764,7 +1748,7 @@
                                 <input 
                                     type="text" 
                                     id="form-region" 
-                                    class="sport-input" 
+                                    class="form-select"
                                     placeholder="Введите место проведения" 
                                     role="combobox" 
                                     aria-expanded="false" 
@@ -2435,6 +2419,116 @@
             });
         }
 
+        function initCombobox(inputId, listboxId, dataArray) {
+            const input = document.getElementById(inputId);
+            const listbox = document.getElementById(listboxId);
+            let activeOptionIndex = -1;
+
+            function filterOptions(query) {
+                listbox.innerHTML = '';
+                activeOptionIndex = -1;
+
+                if (!query) {
+                    closeList();
+                    return;
+                }
+
+                const filtered = dataArray.filter(item => 
+                    item.toLowerCase().includes(query.toLowerCase())
+                );
+
+                if (filtered.length === 0) {
+                    const li = document.createElement('li');
+                    li.className = 'no-results';
+                    li.textContent = 'Ничего не найдено';
+                    li.setAttribute('role', 'presentation');
+                    listbox.appendChild(li);
+                    openList();
+                    return;
+                }
+
+                filtered.forEach((item, index) => {
+                    const li = document.createElement('li');
+                    li.className = 'sport-option';
+                    li.textContent = item;
+                    li.setAttribute('role', 'option');
+                    li.setAttribute('id', `${inputId}-opt-${index}`);
+                    li.setAttribute('aria-selected', 'false');
+                    li.addEventListener('click', () => selectOption(item));
+                    listbox.appendChild(li);
+                });
+
+                openList();
+            }
+
+            function openList() {
+                listbox.style.display = 'block';
+                input.setAttribute('aria-expanded', 'true');
+            }
+
+            function closeList() {
+                listbox.style.display = 'none';
+                input.setAttribute('aria-expanded', 'false');
+                activeOptionIndex = -1;
+            }
+
+            function selectOption(value) {
+                input.value = value;
+                closeList();
+                input.focus();
+            }
+
+            input.addEventListener('input', (e) => {
+                filterOptions(e.target.value);
+            });
+
+            input.addEventListener('keydown', (e) => {
+                const options = listbox.querySelectorAll('[role="option"]');
+                if (options.length === 0) return;
+
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    activeOptionIndex++;
+                    if (activeOptionIndex >= options.length) activeOptionIndex = 0;
+                    updateActiveOption(options);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    activeOptionIndex--;
+                    if (activeOptionIndex < 0) activeOptionIndex = options.length - 1;
+                    updateActiveOption(options);
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (activeOptionIndex !== -1 && options[activeOptionIndex]) {
+                        selectOption(options[activeOptionIndex].textContent);
+                    } else if (options.length > 0) {
+                        selectOption(options[0].textContent);
+                    }
+                } else if (e.key === 'Escape') {
+                    closeList();
+                }
+            });
+
+            function updateActiveOption(options) {
+                options.forEach((opt, idx) => {
+                    if (idx === activeOptionIndex) {
+                        opt.setAttribute('aria-selected', 'true');
+                        opt.classList.add('active');
+                        opt.scrollIntoView({ block: 'nearest' });
+                        input.setAttribute('aria-activedescendant', opt.id);
+                    } else {
+                        opt.setAttribute('aria-selected', 'false');
+                        opt.classList.remove('active');
+                    }
+                });
+            }
+
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest(`#${inputId}`).parentNode) {
+                    closeList();
+                }
+            });
+        }
+
         // ===== INIT =====
         document.addEventListener('DOMContentLoaded', function() {
             animateCounters();
@@ -2656,7 +2750,67 @@
             "Шорт-трек"
         ];
 
-        const input = document.getElementById('sport-search');
+        const regions = [
+            "Все регионы",
+            "Греция",
+            "Республика Крым",
+            "Краснодарский край",
+            "Ростовская область",
+            "Липецкая область",
+            "Новосибирская область",
+            "Воронежская область",
+            "Воронежская, Волгоградская область",
+            "По месту нахождения участников",
+            "Москва",
+            "Санкт-Петербург",
+            "Московская область",
+            "Свердловская область",
+            "Челябинская область",
+            "Татарстан",
+            "Башкортостан",
+            "Дагестан",
+            "Чечня",
+            "Ингушетия",
+            "Кабардино-Балкария",
+            "Карачаево-Черкесия",
+            "Северная Осетия",
+            "Адыгея",
+            "Калмыкия",
+            "Марий Эл",
+            "Мордовия",
+            "Удмуртия",
+            "Чувашия",
+            "Якутия",
+            "Хакасия",
+            "Тыва",
+            "Алтай",
+            "Бурятия",
+            "Забайкальский край",
+            "Приморский край",
+            "Хабаровский край",
+            "Амурская область",
+            "Сахалинская область",
+            "Магаданская область",
+            "Камчатский край",
+            "Иркутская область",
+            "Омская область",
+            "Томская область",
+            "Новосибирская область",
+            "Кемеровская область",
+            "Алтайский край",
+            "Красноярский край",
+            "Пермский край",
+            "Уральский ФО",
+            "Сибирский ФО",
+            "Дальневосточный ФО",
+            "Южный ФО",
+            "Северо-Кавказский ФО",
+            "Приволжский ФО",
+            "Центральный ФО",
+            "Северо-Западный ФО"
+        ];
+
+        const input = document.getElementById('filter-sport');
         const listbox = document.getElementById('sport-listbox');
         let activeOptionIndex = -1; // Индекс текущего выбранного элемента в списке
 
