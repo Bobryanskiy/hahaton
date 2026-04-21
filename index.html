@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Государственная информационная система физической культуры и спорта. Проверка УИН ГТО, календарь мероприятий и статистика.">
+  <title>ФГИС «Спорт» — государственная информационная система</title>
+  <!-- ... мета-теги ... -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header>
+    <a href="#main" class="skip-link">Перейти к основному контенту</a>
+    <div class="container">
+      <nav aria-label="Главная навигация" role="navigation">
+        <ul class="flex-wrap">
+          <li><a href="/" aria-current="page">Главная</a></li>
+          <li><a href="https://minsport.gov.ru/">Министерство спорта РФ</a></li>
+          <li><a href="https://gto.ru/">Программа ГТО</a></li>
+          <li><a href="/stat">Статистика</a></li>
+          <li><a href="/contacts">Контакты</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" role="main" class="container">
+    <h1>ФГИС «Спорт» — государственная информационная система</h1>
+    <p>Платформа собирает данные о физической культуре и спорте в России. Здесь можно проверить УИН ГТО, найти спортивные объекты и узнать о предстоящих мероприятиях.</p>
+    
+    <a href="/uin-check" class="btn-primary" role="button" aria-label="Перейти к проверке УИН участника ГТО">Проверить УИН</a>
+
+    <!-- Секция 1: Мероприятия -->
+    <section aria-labelledby="events-heading">
+      <h2 id="events-heading">Спортивные и физкультурные мероприятия</h2>
+      <p>В 2026 году запланировано 12 464 мероприятия. Данные обновляются автоматически.</p>
+      
+      <div aria-live="polite" role="status" class="card">
+        <figure>
+          <figcaption>Распределение мероприятий по типам:</figcaption>
+          <table aria-describedby="events-heading">
+            <thead>
+              <tr>
+                <th scope="col">Тип</th>
+                <th scope="col">Количество</th>
+                <th scope="col">Доля</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Спортивные соревнования</td><td>11 302</td><td>91%</td></tr>
+              <tr><td>Физкультурные мероприятия</td><td>1 162</td><td>9%</td></tr>
+            </tbody>
+          </table>
+        </figure>
+      </div>
+
+      <article class="card" role="article" tabindex="0">
+        <h3>Чемпионат Европы по тхэквондо ИТФ</h3>
+        <p><strong>Даты:</strong> 19–25 апреля 2026 года</p>
+        <p><strong>Место:</strong> Греция</p>
+        <a href="/events/taekwondo" aria-label="Подробности о Чемпионате Европы по тхэквондо ИТФ">Посмотреть детали мероприятия</a>
+      </article>
+
+      <article class="card" role="article" tabindex="0">
+        <h3>Всероссийские соревнования по велоспорту</h3>
+        <p><strong>Даты:</strong> 20–22 апреля 2026 года</p>
+        <p><strong>Место:</strong> Краснодарский край</p>
+        <a href="/events/cycling" aria-label="Подробности о Всероссийских соревнованиях по велоспорту">Посмотреть детали мероприятия</a>
+      </article>
+    </section>
+
+    <!-- Секция 2: Реестр видов спорта -->
+    <section aria-labelledby="sports-heading">
+      <h2 id="sports-heading">Всероссийский реестр видов спорта</h2>
+      <p>В реестр включено 202 вида спорта. Данные доступны для скачивания в форматах PDF и XLSX.</p>
+      
+      <div aria-live="polite" class="card">
+        <figure>
+          <figcaption>Категории видов спорта:</figcaption>
+          <ul class="stats">
+            <li><strong>Общероссийские:</strong> 156 видов</li>
+            <li><strong>Военно-прикладные:</strong> 23 вида</li>
+            <li><strong>Признанные:</strong> 14 видов</li>
+            <li><strong>Национальные:</strong> 9 видов</li>
+          </ul>
+        </figure>
+        <a href="/sports" aria-label="Открыть полный список видов спорта">Посмотреть все виды спорта</a>
+      </div>
+    </section>
+
+    <!-- Секция 3: Популярность -->
+    <section aria-labelledby="popular-heading">
+      <h3 id="popular-heading">Популярные виды спорта по числу участников</h3>
+      <div class="grid-2">
+        <article class="card" role="article" tabindex="0">
+          <h4>1. Футбол</h4>
+          <p>Участников: 280 985 | Тренеров: 10 795 | Судей: 5 158</p>
+          <a href="/sports/football" aria-label="Подробная статистика по футболу">Открыть данные</a>
+        </article>
+        <article class="card" role="article" tabindex="0">
+          <h4>2. Спортивная борьба</h4>
+          <p>Участников: 178 731 | Тренеров: 6 208 | Судей: 2 177</p>
+          <a href="/sports/wrestling" aria-label="Подробная статистика по спортивной борьбе">Открыть данные</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- Секция 4: Ресурсы -->
+    <section aria-labelledby="resources-heading">
+      <h3 id="resources-heading">Полезные ресурсы</h3>
+      <ul class="flex-wrap">
+        <li class="card"><a href="https://minsport.gov.ru/" aria-label="Перейти на сайт Министерства спорта России">Министерство спорта России</a></li>
+        <li class="card"><a href="https://gosuslugi.ru/" aria-label="Перейти на портал Государственных услуг">Госуслуги</a></li>
+        <li class="card"><a href="https://platform.gov.ru/" aria-label="Перейти на платформу Гостех">Единая цифровая платформа «Гостех»</a></li>
+        <li class="card"><a href="https://gofuture.games/" aria-label="Перейти на сайт Игр будущего">Игры будущего</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer role="contentinfo">
+    <p>© 2026 Динамика развития спорта в РФ</p>
+  </footer>
+
+  <!-- Уведомления для скринридеров -->
+  <div id="live-region" aria-live="polite" role="status" class="sr-only"></div>
+
+  <!-- defer гарантирует выполнение после парсинга DOM без блокировки рендера -->
+  <script src="script.js" defer></script>
+</body>
+</html>
