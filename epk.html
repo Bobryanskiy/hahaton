@@ -1,0 +1,182 @@
+<!-- 🎛️ FILTERS SECTION -->
+<section class="filters-section" aria-labelledby="filters-title">
+  <div class="container">
+    <h2 id="filters-title" class="visually-hidden">Фильтры мероприятий</h2>
+    
+    <!-- Toggle for mobile -->
+    <button 
+      class="filters-toggle" 
+      aria-expanded="true" 
+      aria-controls="filters-panel"
+      type="button"
+    >
+      <span class="filters-toggle-text">Фильтры</span>
+      <svg class="toggle-icon" aria-hidden="true"><use href="assets/img/sprites.svg#icon-chevron"></use></svg>
+    </button>
+    
+    <div id="filters-panel" class="filters-panel" role="region" aria-label="Фильтры поиска">
+      <form class="filters-form" id="ekp-filters" aria-describedby="filters-help">
+        <p id="filters-help" class="visually-hidden">
+          Используйте фильтры для поиска мероприятий. Нажмите "Применить" для обновления результатов.
+        </p>
+        
+        <!-- Вид мероприятия -->
+        <div class="form-group">
+          <label for="filter-type">Вид мероприятия</label>
+          <select id="filter-type" name="type" class="form-select">
+            <option value="">Все</option>
+            <option value="sport">Спортивные</option>
+            <option value="fizkultura">Физкультурные</option>
+          </select>
+        </div>
+        
+        <!-- Тип мероприятия -->
+        <fieldset class="form-group">
+          <legend>Тип мероприятия</legend>
+          <div class="checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" name="subtype" value="international" checked />
+              <span>Международные</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="subtype" value="all-russia" checked />
+              <span>Всероссийские</span>
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="subtype" value="interregional" checked />
+              <span>Межрегиональные</span>
+            </label>
+          </div>
+        </fieldset>
+        
+        <!-- Вид спорта (с поиском) -->
+        <div class="form-group">
+          <label for="filter-sport">Вид спорта</label>
+          <div class="select-with-search">
+            <input 
+              type="text" 
+              id="filter-sport-search" 
+              placeholder="Поиск вида спорта..." 
+              aria-label="Поиск вида спорта"
+              autocomplete="off"
+            />
+            <select id="filter-sport" name="sport" class="form-select" aria-label="Выберите вид спорта">
+              <option value="">Все виды спорта</option>
+              <option value="football">Футбол</option>
+              <option value="tkd-itf">Тхэквондо ИТФ</option>
+              <!-- ... -->
+            </select>
+          </div>
+        </div>
+        
+        <!-- Субъект РФ -->
+        <div class="form-group">
+          <label for="filter-region">Субъект РФ</label>
+          <select id="filter-region" name="region" class="form-select">
+            <option value="">Все регионы</option>
+            <option value="77">Москва</option>
+            <option value="78">Санкт-Петербург</option>
+            <!-- ... -->
+          </select>
+        </div>
+        
+        <!-- Дата -->
+        <fieldset class="form-group">
+          <legend>Дата проведения</legend>
+          <div class="date-range">
+            <div class="date-field">
+              <label for="date-from">С</label>
+              <input type="date" id="date-from" name="date_from" />
+            </div>
+            <span class="date-separator" aria-hidden="true">—</span>
+            <div class="date-field">
+              <label for="date-to">По</label>
+              <input type="date" id="date-to" name="date_to" />
+            </div>
+          </div>
+          <label class="checkbox-label mt-2">
+            <input type="checkbox" id="date-not-set" name="date_not_set" />
+            <span>Дата не назначена</span>
+          </label>
+        </fieldset>
+        
+        <!-- Actions -->
+        <div class="filters-actions">
+          <button type="submit" class="btn btn-primary">Применить</button>
+          <button type="reset" class="btn btn-outline">Сбросить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- 📅 EVENTS LIST -->
+<section class="events-section" aria-labelledby="events-list-title">
+  <div class="container">
+    <h2 id="events-list-title">Мероприятия</h2>
+    
+    <!-- View toggle: calendar/list -->
+    <div class="view-toggle" role="tablist" aria-label="Представление списка">
+      <button 
+        role="tab" 
+        aria-selected="true" 
+        aria-controls="events-list-view"
+        id="tab-list"
+        class="view-btn active"
+      >
+        <svg aria-hidden="true"><use href="assets/img/sprites.svg#icon-list"></use></svg>
+        Список
+      </button>
+      <button 
+        role="tab" 
+        aria-selected="false" 
+        aria-controls="events-calendar-view"
+        id="tab-calendar"
+        class="view-btn"
+        tabindex="-1"
+      >
+        <svg aria-hidden="true"><use href="assets/img/sprites.svg#icon-calendar"></use></svg>
+        Календарь
+      </button>
+    </div>
+    
+    <!-- List view -->
+    <div 
+      id="events-list-view" 
+      role="tabpanel" 
+      aria-labelledby="tab-list"
+      class="events-list"
+    >
+      <!-- Event cards (same structure as homepage) -->
+      <article class="event-card" role="listitem">
+        <span class="event-badge event-badge--sport">Спортивное</span>
+        <h3 class="event-title">ПЕРВЕНСТВО ЕВРОПЫ</h3>
+        <!-- ... meta ... -->
+        <a href="/ekp/2102000014054894" class="btn btn-outline">Подробнее</a>
+      </article>
+      <!-- ... -->
+    </div>
+    
+    <!-- Calendar view (hidden by default) -->
+    <div 
+      id="events-calendar-view" 
+      role="tabpanel" 
+      aria-labelledby="tab-calendar"
+      class="events-calendar"
+      hidden
+    >
+      <!-- Interactive calendar component -->
+    </div>
+    
+    <!-- Pagination -->
+    <nav class="pagination" aria-label="Навигация по страницам">
+      <ul class="pagination-list">
+        <li><a href="?page=1" aria-label="Первая страница">«</a></li>
+        <li><a href="?page=1" aria-label="Страница 1">1</a></li>
+        <li><span class="pagination-current" aria-current="page">2</span></li>
+        <li><a href="?page=3" aria-label="Страница 3">3</a></li>
+        <li><a href="?page=3" aria-label="Следующая страница">»</a></li>
+      </ul>
+    </nav>
+  </div>
+</section>

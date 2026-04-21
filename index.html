@@ -1,131 +1,266 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Государственная информационная система физической культуры и спорта. Проверка УИН ГТО, календарь мероприятий и статистика.">
-  <title>ФГИС «Спорт» — государственная информационная система</title>
-  <!-- ... мета-теги ... -->
-  <link rel="stylesheet" href="css/styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="ФГИС «Спорт» — цифровые сервисы в сфере физической культуры и спорта: календарь мероприятий, реестры, статистика" />
+  
+  <title>ФГИС «Спорт» — Цифровые сервисы в сфере физической культуры и спорта</title>
+  
+  <!-- Critical CSS inline for LCP optimization -->
+  <style>
+    :root{--color-primary:#3744C4;--color-accent:#FF7614;--color-bg:#F5F7FF;--color-text:#17228E;--color-text-muted:#6B7280;--color-success:#10B981;--color-error:#EF4444;--radius-card:12px;--radius-btn:8px;--radius-input:6px;--shadow-card:0 4px 6px rgba(0,0,0,0.05);--focus-ring:2px solid var(--color-primary);--font-stack:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--font-stack);font-size:16px;line-height:1.6;color:var(--color-text);background:var(--color-bg);-webkit-font-smoothing:antialiased}
+    .skip-link{position:absolute;top:-40px;left:0;background:var(--color-primary);color:#fff;padding:12px 24px;z-index:1000;text-decoration:none;border-radius:0 0 var(--radius-btn) var(--radius-btn);transition:top .2s}
+    .skip-link:focus{top:0;outline:var(--focus-ring);outline-offset:2px}
+    @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+  </style>
+  
+  <!-- Preload critical resources -->
+  <link rel="preload" href="assets/css/main.css" as="style" />
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="assets/css/a11y.css" />
 </head>
 <body>
+  <!-- 🔗 Skip link для навигации с клавиатуры -->
+  <a href="#main-content" class="skip-link">Перейти к основному контенту</a>
 
-  <header>
-    <a href="#main" class="skip-link">Перейти к основному контенту</a>
-    <div class="container">
-      <nav aria-label="Главная навигация" role="navigation">
-        <ul class="flex-wrap">
-          <li><a href="/" aria-current="page">Главная</a></li>
-          <li><a href="https://minsport.gov.ru/">Министерство спорта РФ</a></li>
-          <li><a href="https://gto.ru/">Программа ГТО</a></li>
-          <li><a href="/stat">Статистика</a></li>
-          <li><a href="/contacts">Контакты</a></li>
+  <!-- 🧭 HEADER -->
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a href="https://minsport.gov.ru" class="header-logo" aria-label="Министерство спорта России, открыть в новой вкладке" target="_blank" rel="noopener">
+        <svg class="logo-icon" aria-hidden="true" focusable="false">
+          <use href="assets/img/sprites.svg#minsport-logo"></use>
+        </svg>
+      </a>
+      
+      <a href="/" class="site-title" aria-label="ФГИС Спорт — на главную">
+        ФГИС «<span class="accent">Спорт</span>»
+      </a>
+
+      <nav class="header-nav" aria-label="Основная навигация">
+        <ul class="nav-list" role="menubar">
+          <li role="none"><a href="/sport-norm" role="menuitem">Спорт — норма жизни</a></li>
+          <li role="none"><a href="/gto" role="menuitem">ВФСК ГТО</a></li>
         </ul>
       </nav>
+
+      <div class="header-actions">
+        <!-- 🔍 Поиск с label для screen readers -->
+        <form class="search-form" role="search" action="/search" method="get">
+          <label for="site-search" class="visually-hidden">Поиск по сайту</label>
+          <input 
+            type="search" 
+            id="site-search" 
+            name="q" 
+            placeholder="Поиск..." 
+            aria-label="Поиск по сайту"
+            autocomplete="off"
+            class="search-input"
+          />
+          <button type="submit" class="search-btn" aria-label="Найти">
+            <svg aria-hidden="true" focusable="false"><use href="assets/img/sprites.svg#icon-search"></use></svg>
+          </button>
+        </form>
+
+        <!-- 👁️ Версия для слабовидящих -->
+        <button 
+          type="button" 
+          class="a11y-toggle" 
+          aria-pressed="false"
+          aria-label="Версия для слабовидящих"
+          data-a11y-toggle
+        >
+          <svg aria-hidden="true"><use href="assets/img/sprites.svg#icon-eye"></use></svg>
+          <span class="visually-hidden">Включить версию для слабовидящих</span>
+        </button>
+
+        <!-- 🔐 Вход в ЛК -->
+        <a href="/login" class="btn btn-primary btn-sm">Войти</a>
+      </div>
+
+      <!-- 📱 Mobile menu toggle -->
+      <button 
+        class="mobile-menu-toggle" 
+        aria-expanded="false" 
+        aria-controls="mobile-menu"
+        aria-label="Открыть меню"
+      >
+        <span class="hamburger"></span>
+      </button>
     </div>
   </header>
 
-  <main id="main" role="main" class="container">
-    <h1>ФГИС «Спорт» — государственная информационная система</h1>
-    <p>Платформа собирает данные о физической культуре и спорте в России. Здесь можно проверить УИН ГТО, найти спортивные объекты и узнать о предстоящих мероприятиях.</p>
+  <!-- 🎯 HERO SECTION -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="container">
+      <h1 id="hero-title" class="hero-title">
+        Цифровые сервисы в сфере физической культуры и спорта
+      </h1>
+      <p class="hero-subtitle">
+        Единая платформа для спортсменов, тренеров, организаций и болельщиков. 
+        Прозрачные данные, удобные инструменты, актуальная информация.
+      </p>
+
+      <!-- ⚡ Быстрые ссылки (карточки) -->
+      <div class="quick-links" role="list">
+        <a href="/ekp" class="quick-link-card" role="listitem">
+          <svg class="quick-link-icon" aria-hidden="true"><use href="assets/img/sprites.svg#icon-calendar"></use></svg>
+          <span class="quick-link-text">Единый календарный план</span>
+        </a>
+        <a href="/reestr-vidov" class="quick-link-card" role="listitem">
+          <svg class="quick-link-icon" aria-hidden="true"><use href="assets/img/sprites.svg#icon-sport"></use></svg>
+          <span class="quick-link-text">Реестр видов спорта</span>
+        </a>
+        <a href="/objekty" class="quick-link-card" role="listitem">
+          <svg class="quick-link-icon" aria-hidden="true"><use href="assets/img/sprites.svg#icon-building"></use></svg>
+          <span class="quick-link-text">Объекты спорта</span>
+        </a>
+        <a href="/federacii" class="quick-link-card" role="listitem">
+          <svg class="quick-link-icon" aria-hidden="true"><use href="assets/img/sprites.svg#icon-people"></use></svg>
+          <span class="quick-link-text">Спортивные федерации</span>
+        </a>
+        <a href="/org-podgotovki" class="quick-link-card" role="listitem">
+          <svg class="quick-link-icon" aria-hidden="true"><use href="assets/img/sprites.svg#icon-school"></use></svg>
+          <span class="quick-link-text">Организации подготовки</span>
+        </a>
+        <a href="/zapis-school" class="quick-link-card" role="listitem">
+          <svg class="quick-link-icon" aria-hidden="true"><use href="assets/img/sprites.svg#icon-register"></use></svg>
+          <span class="quick-link-text">Запись в спортшколы</span>
+        </a>
+      </div>
+
+      <!-- 📊 Анимированная статистика -->
+      <div class="stats-grid" aria-label="Статистика платформы">
+        <div class="stat-card">
+          <span class="stat-number" data-count="4512" aria-live="polite">0</span>
+          <span class="stat-label">Спортивных федераций</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number" data-count="7227" aria-live="polite">0</span>
+          <span class="stat-label">Объектов спорта</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number" data-count="5386" aria-live="polite">0</span>
+          <span class="stat-label">Организаций</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number" data-count="2869317" aria-live="polite">0</span>
+          <span class="stat-label">Спортсменов</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 📦 MAIN CONTENT -->
+  <main id="main-content" class="main-content" role="main" tabindex="-1">
     
-    <a href="/uin-check" class="btn-primary" role="button" aria-label="Перейти к проверке УИН участника ГТО">Проверить УИН</a>
-
-    <!-- Секция 1: Мероприятия -->
-    <section aria-labelledby="events-heading">
-      <h2 id="events-heading">Спортивные и физкультурные мероприятия</h2>
-      <p>В 2026 году запланировано 12 464 мероприятия. Данные обновляются автоматически.</p>
-      
-      <div aria-live="polite" role="status" class="card">
-        <figure>
-          <figcaption>Распределение мероприятий по типам:</figcaption>
-          <table aria-describedby="events-heading">
-            <thead>
-              <tr>
-                <th scope="col">Тип</th>
-                <th scope="col">Количество</th>
-                <th scope="col">Доля</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>Спортивные соревнования</td><td>11 302</td><td>91%</td></tr>
-              <tr><td>Физкультурные мероприятия</td><td>1 162</td><td>9%</td></tr>
-            </tbody>
-          </table>
-        </figure>
-      </div>
-
-      <article class="card" role="article" tabindex="0">
-        <h3>Чемпионат Европы по тхэквондо ИТФ</h3>
-        <p><strong>Даты:</strong> 19–25 апреля 2026 года</p>
-        <p><strong>Место:</strong> Греция</p>
-        <a href="/events/taekwondo" aria-label="Подробности о Чемпионате Европы по тхэквондо ИТФ">Посмотреть детали мероприятия</a>
-      </article>
-
-      <article class="card" role="article" tabindex="0">
-        <h3>Всероссийские соревнования по велоспорту</h3>
-        <p><strong>Даты:</strong> 20–22 апреля 2026 года</p>
-        <p><strong>Место:</strong> Краснодарский край</p>
-        <a href="/events/cycling" aria-label="Подробности о Всероссийских соревнованиях по велоспорту">Посмотреть детали мероприятия</a>
-      </article>
-    </section>
-
-    <!-- Секция 2: Реестр видов спорта -->
-    <section aria-labelledby="sports-heading">
-      <h2 id="sports-heading">Всероссийский реестр видов спорта</h2>
-      <p>В реестр включено 202 вида спорта. Данные доступны для скачивания в форматах PDF и XLSX.</p>
-      
-      <div aria-live="polite" class="card">
-        <figure>
-          <figcaption>Категории видов спорта:</figcaption>
-          <ul class="stats">
-            <li><strong>Общероссийские:</strong> 156 видов</li>
-            <li><strong>Военно-прикладные:</strong> 23 вида</li>
-            <li><strong>Признанные:</strong> 14 видов</li>
-            <li><strong>Национальные:</strong> 9 видов</li>
-          </ul>
-        </figure>
-        <a href="/sports" aria-label="Открыть полный список видов спорта">Посмотреть все виды спорта</a>
+    <!-- 🔥 Популярные виды спорта -->
+    <section class="section" aria-labelledby="popular-sports-title">
+      <div class="container">
+        <h2 id="popular-sports-title">Популярные виды спорта</h2>
+        <div class="sports-grid">
+          <article class="sport-card">
+            <svg class="sport-icon" aria-hidden="true"><use href="assets/img/sprites.svg#icon-football"></use></svg>
+            <h3 class="sport-name">Футбол</h3>
+            <p class="sport-stat"><strong>124 917</strong> спортсменов</p>
+          </article>
+          <!-- ... остальные карточки ... -->
+        </div>
       </div>
     </section>
 
-    <!-- Секция 3: Популярность -->
-    <section aria-labelledby="popular-heading">
-      <h3 id="popular-heading">Популярные виды спорта по числу участников</h3>
-      <div class="grid-2">
-        <article class="card" role="article" tabindex="0">
-          <h4>1. Футбол</h4>
-          <p>Участников: 280 985 | Тренеров: 10 795 | Судей: 5 158</p>
-          <a href="/sports/football" aria-label="Подробная статистика по футболу">Открыть данные</a>
-        </article>
-        <article class="card" role="article" tabindex="0">
-          <h4>2. Спортивная борьба</h4>
-          <p>Участников: 178 731 | Тренеров: 6 208 | Судей: 2 177</p>
-          <a href="/sports/wrestling" aria-label="Подробная статистика по спортивной борьбе">Открыть данные</a>
-        </article>
+    <!-- 📅 Мероприятия -->
+    <section class="section" aria-labelledby="events-title">
+      <div class="container">
+        <h2 id="events-title">Спортивные и физкультурные мероприятия</h2>
+        <a href="/ekp" class="view-all-link">Посмотреть все →</a>
+        <div class="events-list" role="list">
+          <!-- Карточка мероприятия (пример) -->
+          <article class="event-card" role="listitem">
+            <span class="event-badge event-badge--sport" aria-label="Тип: спортивное мероприятие">Спортивное</span>
+            <h3 class="event-title">ПЕРВЕНСТВО ЕВРОПЫ</h3>
+            <div class="event-meta">
+              <p><svg aria-hidden="true"><use href="assets/img/sprites.svg#icon-sport"></use></svg> Тхэквондо ИТФ</p>
+              <p><svg aria-hidden="true"><use href="assets/img/sprites.svg#icon-age"></use></svg> Юниоры 16-17 лет</p>
+              <p><svg aria-hidden="true"><use href="assets/img/sprites.svg#icon-date"></use></svg> 19 – 25 апреля 2026</p>
+              <p><svg aria-hidden="true"><use href="assets/img/sprites.svg#icon-location"></use></svg> ГРЕЦИЯ</p>
+              <p class="event-ekp"><small>№ ЕКП 2102000014054894</small></p>
+            </div>
+            <a href="/ekp/2102000014054894" class="btn btn-outline">Подробнее</a>
+          </article>
+          <!-- ... остальные мероприятия ... -->
+        </div>
       </div>
     </section>
 
-    <!-- Секция 4: Ресурсы -->
-    <section aria-labelledby="resources-heading">
-      <h3 id="resources-heading">Полезные ресурсы</h3>
-      <ul class="flex-wrap">
-        <li class="card"><a href="https://minsport.gov.ru/" aria-label="Перейти на сайт Министерства спорта России">Министерство спорта России</a></li>
-        <li class="card"><a href="https://gosuslugi.ru/" aria-label="Перейти на портал Государственных услуг">Госуслуги</a></li>
-        <li class="card"><a href="https://platform.gov.ru/" aria-label="Перейти на платформу Гостех">Единая цифровая платформа «Гостех»</a></li>
-        <li class="card"><a href="https://gofuture.games/" aria-label="Перейти на сайт Игр будущего">Игры будущего</a></li>
-      </ul>
+    <!-- 📰 Новости -->
+    <section class="section" aria-labelledby="news-title">
+      <div class="container">
+        <h2 id="news-title">Новости и объявления</h2>
+        <div class="news-list">
+          <!-- Новости с правильным time и article -->
+        </div>
+      </div>
     </section>
+
+    <!-- 🔗 Полезные ресурсы -->
+    <section class="section" aria-labelledby="resources-title">
+      <div class="container">
+        <h2 id="resources-title">Полезные ресурсы</h2>
+        <ul class="resources-list">
+          <li><a href="https://minsport.gov.ru">Министерство спорта России</a></li>
+          <li><a href="https://sport-norm.ru">Спорт — норма жизни</a></li>
+          <li><a href="https://gosuslugi.ru">Госуслуги</a></li>
+          <!-- ... остальные ... -->
+        </ul>
+      </div>
+    </section>
+
   </main>
 
-  <footer role="contentinfo">
-    <p>© 2026 Динамика развития спорта в РФ</p>
+  <!-- 🦶 FOOTER -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <h3>Контакты</h3>
+        <address>
+          <p>123100, г. Москва,<br>ул. Казакова, 18</p>
+          <p><a href="tel:+74951234567">+7 (495) 123-45-67</a></p>
+          <p><a href="mailto:support@sportrf.gov.ru">support@sportrf.gov.ru</a></p>
+        </address>
+      </div>
+      <div class="footer-col">
+        <h3>Разделы</h3>
+        <ul class="footer-links">
+          <li><a href="/ekp">Единый календарный план</a></li>
+          <li><a href="/reestr-vidov">Реестр видов спорта</a></li>
+          <!-- ... -->
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Социальные сети</h3>
+        <ul class="social-links">
+          <li><a href="#" aria-label="ВКонтакте"><svg><use href="assets/img/sprites.svg#icon-vk"></use></svg></a></li>
+          <li><a href="#" aria-label="Telegram"><svg><use href="assets/img/sprites.svg#icon-tg"></use></svg></a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Доступность</h3>
+        <p>Сайт соответствует стандартам WCAG 2.2 AA</p>
+        <a href="/a11y-statement" class="footer-link">Декларация доступности</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 ФГИС «Спорт». Все права защищены.</p>
+    </div>
   </footer>
 
-  <!-- Уведомления для скринридеров -->
-  <div id="live-region" aria-live="polite" role="status" class="sr-only"></div>
-
-  <!-- defer гарантирует выполнение после парсинга DOM без блокировки рендера -->
-  <script src="js/main.js" defer></script>
+  <!-- Scripts -->
+  <script src="assets/js/utils.js" defer></script>
+  <script src="assets/js/a11y.js" defer></script>
+  <script src="assets/js/main.js" defer></script>
 </body>
 </html>
