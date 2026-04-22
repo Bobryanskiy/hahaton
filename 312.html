@@ -744,6 +744,13 @@
             flex-direction: column;
             gap: 16px;
         }
+        
+        .events-found-label {
+            font-size: 14px;
+            color: var(--color-text-muted);
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
 
         .event-card {
             background: var(--color-surface);
@@ -1820,6 +1827,7 @@
                 </div>
 
                 <!-- Events List -->
+                <div class="events-found-label" id="events-count" aria-live="polite">Найдено мероприятий: 5</div>
                 <div class="events-list" id="events-list" role="list" aria-label="Список мероприятий">
                     <!-- Event 1 -->
                     <article class="event-card" role="listitem" data-sport="Тхэквондо ИТФ" data-date-start="2026-04-19" data-date-end="2026-04-25" data-region="Греция">
@@ -2374,18 +2382,50 @@
             selectedDay = dayNum;
             renderCalendar();
             
-            // Filter events by date
+            // Фильтрация мероприятий по выбранной дате
             var cards = document.querySelectorAll('.event-card');
             var visibleCount = 0;
+            var selectedDate = currentYear + '-' + String(currentMonth + 1).padStart(2, '0') + '-' + String(dayNum).padStart(2, '0');
             
-            // Simple: show all for now, announce selection
-            announce('Выбрана дата: ' + dayNum + ' апреля 2026');
+            cards.forEach(function(card) {
+                var cardDateStart = card.getAttribute('data-date-start') || '';
+                var cardDateEnd = card.getAttribute('data-date-end') || '';
+                
+                // Проверяем, попадает ли выбранная дата в диапазон дат мероприятия
+                var isVisible = false;
+                if (cardDateStart && cardDateEnd) {
+                    isVisible = (selectedDate >= cardDateStart && selectedDate <= cardDateEnd);
+                } else if (cardDateStart) {
+                    isVisible = (selectedDate === cardDateStart);
+                }
+                
+                if (isVisible) {
+                    card.style.display = '';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
             
-            // Scroll to events
+            // Обновляем счетчик найденных мероприятий
+            var countLabel = document.getElementById('events-count');
+            if (countLabel) {
+                countLabel.textContent = 'Найдено мероприятий: ' + visibleCount;
+            }
+            
+            announce('Выбрана дата: ' + dayNum + ' ' + getMonthName(currentMonth) + ' ' + currentYear + '. Найдено мероприятий: ' + visibleCount);
+            
+            // Скролл к списку событий
             var eventsList = document.getElementById('events-list');
             if (eventsList) {
                 eventsList.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
+        }
+        
+        function getMonthName(monthIndex) {
+            var monthNames = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 
+                             'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+            return monthNames[monthIndex];
         }
         
         function changeMonth(delta) {
@@ -2400,9 +2440,21 @@
             selectedDay = null;
             renderCalendar();
             
+            // Сбрасываем фильтр дат при смене месяца - показываем все мероприятия
+            var cards = document.querySelectorAll('.event-card');
+            cards.forEach(function(card) {
+                card.style.display = '';
+            });
+            
+            // Обновляем счетчик
+            var countLabel = document.getElementById('events-count');
+            if (countLabel) {
+                countLabel.textContent = 'Найдено мероприятий: ' + cards.length;
+            }
+            
             var monthNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 
                              'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
-            announce('Календарь: ' + monthNames[currentMonth] + ' ' + currentYear);
+            announce('Календарь: ' + monthNames[currentMonth] + ' ' + currentYear + '. Показаны все мероприятия.');
         }
         
         function formatDate(dateStr) {
