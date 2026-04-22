@@ -47,6 +47,67 @@
             --shadow-focus: 0 0 0 3px rgba(92, 107, 218, 0.4);
         }
 
+        /* High contrast theme variables */
+        [data-theme="contrast"] {
+            --color-primary: #000000;
+            --color-primary-dark: #000000;
+            --color-accent: #FFFF00;
+            --color-accent-hover: #CCCCCC;
+            --color-bg: #000000;
+            --color-surface: #000000;
+            --color-text-main: #FFFFFF;
+            --color-text-muted: #FFFFFF;
+            --color-success: #00FF00;
+            --color-error: #FF0000;
+            --color-border: #FFFFFF;
+            --shadow-card: none;
+            --shadow-focus: 0 0 0 3px #FFFF00;
+        }
+
+        /* High contrast theme specific styles */
+        [data-theme="contrast"] .hero {
+            background: #000000;
+            border: 2px solid #FFFFFF;
+        }
+
+        [data-theme="contrast"] .stat-card {
+            background: #000000;
+            border: 2px solid #FFFFFF;
+            color: #FFFFFF;
+        }
+
+        [data-theme="contrast"] .stat-card:hover,
+        [data-theme="contrast"] .stat-card:focus-within {
+            background: #1a1a1a;
+            border-color: #FFFF00;
+        }
+
+        [data-theme="contrast"] .stat-number,
+        [data-theme="contrast"] .stat-label {
+            color: #FFFFFF;
+        }
+
+        [data-theme="contrast"] .theme-toggle-btn {
+            background: #000000;
+            border: 2px solid #FFFFFF;
+            color: #FFFFFF;
+        }
+
+        [data-theme="contrast"] .theme-toggle-btn:hover {
+            border-color: #FFFF00;
+        }
+
+        [data-theme="contrast"] .btn-primary {
+            background: #000000;
+            border: 2px solid #FFFFFF;
+            color: #FFFFFF;
+        }
+
+        [data-theme="contrast"] .btn-primary:hover {
+            border-color: #FFFF00;
+            color: #FFFF00;
+        }
+
         *, *::before, *::after {
             box-sizing: border-box;
             margin: 0;
@@ -457,6 +518,7 @@
             text-align: center;
             cursor: pointer;
             transition: all var(--transition-fast);
+            color: #fff;
         }
         .stat-card:hover, .stat-card:focus-within {
             background: rgba(255,255,255,0.2);
@@ -473,12 +535,14 @@
             font-weight: 700;
             margin-bottom: 4px;
             pointer-events: none;
+            color: #fff;
         }
 
         .stat-label {
             font-size: 13px;
             opacity: 0.8;
             pointer-events: none;
+            color: #fff;
         }
 
         /* ===== SECTION ===== */
@@ -1382,12 +1446,15 @@
                 </a>
             </div>
             <div class="header-actions">
-                <button type="button" class="theme-toggle-btn" id="theme-toggle" aria-label="Переключить тему оформления" title="Переключить тему">
+                <button type="button" class="theme-toggle-btn" id="theme-toggle" aria-label="Переключить тему оформления. Текущая тема: светлая" title="Переключить тему">
                     <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                         <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
                     </svg>
                     <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="display:none;">
                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                    <svg class="contrast-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="display:none;">
+                        <circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 10 10c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm0 2a8 8 0 0 0-8 8c0 2.21.895 4.21 2.344 5.656A7.97 7.97 0 0 1 12 4a7.97 7.97 0 0 1 5.656 2.344A8 8 0 0 0 12 4z"/>
                     </svg>
                 </button>
                 <div class="search-box">
@@ -3008,36 +3075,50 @@
             const themeToggle = document.getElementById('theme-toggle');
             const sunIcon = themeToggle?.querySelector('.sun-icon');
             const moonIcon = themeToggle?.querySelector('.moon-icon');
+            const contrastIcon = themeToggle?.querySelector('.contrast-icon');
             
             // Load saved theme from localStorage
             const savedTheme = localStorage.getItem('theme') || 'light';
-            if (savedTheme === 'dark') {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                if (sunIcon) sunIcon.style.display = 'none';
-                if (moonIcon) moonIcon.style.display = 'block';
+            
+            function updateThemeIcons(theme) {
+                if (sunIcon) sunIcon.style.display = theme === 'light' ? 'block' : 'none';
+                if (moonIcon) moonIcon.style.display = theme === 'dark' ? 'block' : 'none';
+                if (contrastIcon) contrastIcon.style.display = theme === 'contrast' ? 'block' : 'none';
+                
+                // Update aria-label with current theme
+                const themeLabels = { 'light': 'светлая', 'dark': 'тёмная', 'contrast': 'контрастная' };
+                if (themeToggle) {
+                    themeToggle.setAttribute('aria-label', `Переключить тему оформления. Текущая тема: ${themeLabels[theme]}`);
+                }
+            }
+            
+            if (savedTheme === 'dark' || savedTheme === 'contrast') {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                updateThemeIcons(savedTheme);
             }
 
             if (themeToggle) {
                 themeToggle.addEventListener('click', () => {
-                    const currentTheme = document.documentElement.getAttribute('data-theme');
-                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+                    let newTheme;
+                    
+                    // Cycle through: light -> dark -> contrast -> light
+                    if (currentTheme === 'light') {
+                        newTheme = 'dark';
+                    } else if (currentTheme === 'dark') {
+                        newTheme = 'contrast';
+                    } else {
+                        newTheme = 'light';
+                    }
                     
                     document.documentElement.setAttribute('data-theme', newTheme);
                     localStorage.setItem('theme', newTheme);
                     
-                    if (sunIcon && moonIcon) {
-                        if (newTheme === 'dark') {
-                            sunIcon.style.display = 'none';
-                            moonIcon.style.display = 'block';
-                        } else {
-                            sunIcon.style.display = 'block';
-                            moonIcon.style.display = 'none';
-                        }
-                    }
+                    updateThemeIcons(newTheme);
                     
                     // Announce theme change for screen readers
-                    const themeName = newTheme === 'dark' ? 'тёмная' : 'светлая';
-                    announce(`Тема оформления переключена на ${themeName}`);
+                    const themeLabels = { 'light': 'светлая', 'dark': 'тёмная', 'contrast': 'контрастная' };
+                    announce(`Тема оформления переключена на ${themeLabels[newTheme]}`);
                 });
             }
         });
