@@ -865,17 +865,30 @@
       justify-content: center;
       background: rgba(55, 68, 196, 0.08);
       border-radius: 50%;
-      font-size: 28px;
       flex-shrink: 0;
+    }
+
+    .service-card-icon svg {
+      width: 28px;
+      height: 28px;
+      color: var(--color-primary);
     }
 
     [data-theme="dark"] .service-card-icon {
       background: rgba(92, 107, 218, 0.2);
     }
 
+    [data-theme="dark"] .service-card-icon svg {
+      color: var(--color-primary);
+    }
+
     [data-theme="contrast"] .service-card-icon {
       background: #000000;
       border: 2px solid #FFFFFF;
+    }
+
+    [data-theme="contrast"] .service-card-icon svg {
+      color: #FFFFFF;
     }
 
     .service-card h3 {
@@ -2282,7 +2295,14 @@
             <div class="cards-grid">
 
               <div class="service-card">
-                <div class="service-card-icon" aria-hidden="true">🏫</div>
+                <div class="service-card-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                    <path d="M12 8v4"></path>
+                    <path d="M12 16h.01"></path>
+                  </svg>
+                </div>
                 <h3>Запись детей в спортивную школу</h3>
                 <p>Подать электронное заявление через портал Госуслуг</p>
                 <div class="card-action">
@@ -2297,7 +2317,16 @@
               </div>
 
               <div class="service-card">
-                <div class="service-card-icon" aria-hidden="true">🏆</div>
+                <div class="service-card-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                    <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                    <path d="M4 22h16"></path>
+                    <path d="M10 14.66V17c0 .55-.81.66-1.13.2l-2.6-3.63a2.5 2.5 0 0 1 0-2.86l2.6-3.63A.66.66 0 0 1 10 7.34V10"></path>
+                    <path d="M14 9.34V7c0-.55.81-.66 1.13-.2l2.6 3.63a2.5 2.5 0 0 1 0 2.86l-2.6 3.63A.66.66 0 0 1 14 16.66V14"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </div>
                 <h3>Запись на массовые физкультурные мероприятия</h3>
                 <p>Подать электронное заявление через портал Госуслуг</p>
                 <div class="card-action">
@@ -2313,7 +2342,13 @@
               </div>
 
               <div class="service-card">
-                <div class="service-card-icon" aria-hidden="true">🥇</div>
+                <div class="service-card-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="8" r="6"></circle>
+                    <path d="M15.09 14c.18-.98.27-1.96.27-2.93a3 3 0 0 0-6 0c0 .97.09 1.95.27 2.93"></path>
+                    <path d="M5 20h14"></path>
+                  </svg>
+                </div>
                 <h3>Запись на сдачу нормативов ГТО</h3>
                 <p>Подать электронное заявление через портал Госуслуг</p>
                 <div class="card-action">
@@ -2329,7 +2364,12 @@
               </div>
 
               <div class="service-card">
-                <div class="service-card-icon" aria-hidden="true">🧭</div>
+                <div class="service-card-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M16.24 7.76l-2.12 6.36-6.36 2.12"></path>
+                  </svg>
+                </div>
                 <h3>Выбор спорта для ребёнка</h3>
                 <p>⚠️ В настоящий момент проходит тестирование обновлённой модели</p>
                 <div class="card-action">
@@ -2344,7 +2384,12 @@
               </div>
 
               <div class="service-card">
-                <div class="service-card-icon" aria-hidden="true">📍</div>
+                <div class="service-card-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                </div>
                 <h3>Объекты спорта</h3>
                 <p>Найти объект спорта в своём регионе</p>
                 <div class="card-action">
@@ -2359,7 +2404,14 @@
               </div>
 
               <div class="service-card">
-                <div class="service-card-icon" aria-hidden="true">📅</div>
+                <div class="service-card-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                </div>
                 <h3>Единый календарный план</h3>
                 <p>Расписание всех физкультурных и спортивных мероприятий</p>
                 <div class="card-action">
@@ -2374,7 +2426,12 @@
               </div>
 
               <div class="service-card">
-                <div class="service-card-icon" aria-hidden="true">📚</div>
+                <div class="service-card-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                  </svg>
+                </div>
                 <h3>Нормативно-справочная информация</h3>
                 <p>Справочники и классификаторы сферы ФКиС</p>
                 <div class="card-action">
@@ -2389,7 +2446,12 @@
               </div>
 
               <div class="service-card">
-                <div class="service-card-icon" aria-hidden="true">💰</div>
+                <div class="service-card-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="1" x2="12" y2="23"></line>
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                  </svg>
+                </div>
                 <h3>Налоговый вычет за занятия спортом</h3>
                 <p>Перечень организаций, осуществляющих деятельность в сфере ФКиС</p>
                 <div class="card-action">
@@ -2405,7 +2467,12 @@
               </div>
 
               <div class="service-card">
-                <div class="service-card-icon" aria-hidden="true">🏅</div>
+                <div class="service-card-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="8" r="7"></circle>
+                    <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                  </svg>
+                </div>
                 <h3>ГТО</h3>
                 <p>Программно-нормативная основа физического воспитания населения</p>
                 <div class="card-action">
@@ -2426,7 +2493,12 @@
             <div class="cards-grid">
 
               <div class="service-card">
-                <div class="service-card-icon" aria-hidden="true">🏅</div>
+                <div class="service-card-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="8" r="7"></circle>
+                    <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                  </svg>
+                </div>
                 <h3>Присвоение спортивных разрядов</h3>
                 <p>Запись доступна в некоторых регионах</p>
                 <div class="card-action">
@@ -2441,7 +2513,14 @@
               </div>
 
               <div class="service-card">
-                <div class="service-card-icon" aria-hidden="true">⚖️</div>
+                <div class="service-card-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 3v18"></path>
+                    <path d="M8 8h8"></path>
+                    <path d="M6 13h12"></path>
+                    <path d="M4 18h16"></path>
+                  </svg>
+                </div>
                 <h3>Присвоение категорий спортивных судей</h3>
                 <p>Запись доступна в некоторых регионах</p>
                 <div class="card-action">
@@ -2456,7 +2535,16 @@
               </div>
 
               <div class="service-card">
-                <div class="service-card-icon" aria-hidden="true">🏛️</div>
+                <div class="service-card-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 21h18"></path>
+                    <path d="M5 21V7l8-4 8 4v14"></path>
+                    <path d="M9 10a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"></path>
+                    <path d="M9 10v11"></path>
+                    <path d="M15 10a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"></path>
+                    <path d="M15 10v11"></path>
+                  </svg>
+                </div>
                 <h3>Статус региональной спортивной федерации</h3>
                 <p>Запись доступна в некоторых регионах</p>
                 <div class="card-action">
@@ -2471,7 +2559,13 @@
               </div>
 
               <div class="service-card">
-                <div class="service-card-icon" aria-hidden="true">🏟️</div>
+                <div class="service-card-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 21h18"></path>
+                    <path d="M5 21V7l8-4 8 4v14"></path>
+                    <rect x="9" y="9" width="6" height="4"></rect>
+                  </svg>
+                </div>
                 <h3>Реестр объектов спорта</h3>
                 <p>Подать заявление через Госуслуги</p>
                 <div class="card-action">
