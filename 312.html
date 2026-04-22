@@ -30,6 +30,23 @@
             --transition-fast: 150ms ease;
         }
 
+        /* Dark theme variables */
+        [data-theme="dark"] {
+            --color-primary: #5c6bda;
+            --color-primary-dark: #3744C4;
+            --color-accent: #FF8A3D;
+            --color-accent-hover: #FF7614;
+            --color-bg: #0f172a;
+            --color-surface: #1e293b;
+            --color-text-main: #e2e8f0;
+            --color-text-muted: #94a3b8;
+            --color-success: #34d399;
+            --color-error: #f87171;
+            --color-border: #334155;
+            --shadow-card: 0 4px 6px rgba(0,0,0,0.3);
+            --shadow-focus: 0 0 0 3px rgba(92, 107, 218, 0.4);
+        }
+
         *, *::before, *::after {
             box-sizing: border-box;
             margin: 0;
@@ -117,6 +134,69 @@
             outline: none;
         }
 
+        /* Dark theme body adjustments */
+        [data-theme="dark"] body {
+            background: var(--color-bg);
+            color: var(--color-text-main);
+        }
+
+        [data-theme="dark"] .site-header {
+            background: var(--color-primary);
+        }
+
+        [data-theme="dark"] .search-box input {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        [data-theme="dark"] .btn-login {
+            background: var(--color-surface);
+            color: var(--color-text-main);
+        }
+
+        [data-theme="dark"] .service-card {
+            background: var(--color-surface);
+            border-color: var(--color-border);
+        }
+
+        [data-theme="dark"] .event-card {
+            background: var(--color-surface);
+            border-color: var(--color-border);
+        }
+
+        [data-theme="dark"] .filters-panel {
+            background: var(--color-surface);
+            border-color: var(--color-border);
+        }
+
+        [data-theme="dark"] .calendar-wrapper {
+            background: var(--color-surface);
+            border-color: var(--color-border);
+        }
+
+        [data-theme="dark"] .cal-nav-btn {
+            background: var(--color-surface);
+            border-color: var(--color-border);
+        }
+
+        [data-theme="dark"] .quick-link-card {
+            background: var(--color-surface);
+            border-color: var(--color-border);
+        }
+
+        [data-theme="dark"] .sport-card {
+            background: var(--color-surface);
+            border-color: var(--color-border);
+        }
+
+        [data-theme="dark"] .tab-btn {
+            color: var(--color-text-muted);
+        }
+
+        [data-theme="dark"] .tab-btn[aria-selected="true"] {
+            color: var(--color-primary);
+        }
+
         /* ===== CONTAINER ===== */
         .container {
             width: 100%;
@@ -133,7 +213,30 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            transition: transform 0.3s ease-in-out;
+            transition: transform 0.3s ease-in-out, background-color var(--transition-fast);
+        }
+
+        .theme-toggle-btn {
+            background: rgba(255,255,255,0.15);
+            border: none;
+            color: #fff;
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-btn);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background var(--transition-fast);
+            min-height: 44px;
+            min-width: 44px;
+        }
+        .theme-toggle-btn:hover {
+            background: rgba(255,255,255,0.25);
+        }
+        .theme-toggle-btn:focus-visible {
+            outline: 2px solid #fff;
+            outline-offset: 2px;
         }
 
         .header-inner {
@@ -352,6 +455,16 @@
             padding: 20px;
             border-radius: var(--radius-md);
             text-align: center;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        .stat-card:hover, .stat-card:focus-within {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+        .stat-card:focus-visible {
+            outline: 2px solid #fff;
+            outline-offset: 2px;
         }
 
         .stat-number {
@@ -359,11 +472,13 @@
             font-size: 28px;
             font-weight: 700;
             margin-bottom: 4px;
+            pointer-events: none;
         }
 
         .stat-label {
             font-size: 13px;
             opacity: 0.8;
+            pointer-events: none;
         }
 
         /* ===== SECTION ===== */
@@ -1267,6 +1382,14 @@
                 </a>
             </div>
             <div class="header-actions">
+                <button type="button" class="theme-toggle-btn" id="theme-toggle" aria-label="Переключить тему оформления" title="Переключить тему">
+                    <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                    </svg>
+                    <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="display:none;">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
                 <div class="search-box">
                     <label for="site-search" class="visually-hidden">Поиск по сайту</label>
                     <input type="search" id="site-search" placeholder="Поиск по сайту..." aria-label="Поиск по сайту" autocomplete="off">
@@ -1334,23 +1457,23 @@
                     </nav>
 
                     <!-- Stats -->
-                    <div class="stats-grid" aria-label="Статистика платформы в цифрах">
-                        <div class="stat-card">
-                            <span class="stat-number" data-count="4512" aria-live="polite">0</span>
+                    <div class="stats-grid" role="group" aria-label="Статистика платформы в цифрах">
+                        <button class="stat-card" type="button" onclick="window.open('https://sportrf.gov.ru/sports-federations', '_blank', 'noopener')" aria-label="Спортивных федераций: 4512. Перейти к списку федераций">
+                            <span class="stat-number" data-count="4512" aria-live="polite" aria-hidden="true">0</span>
                             <span class="stat-label">Спортивных федераций</span>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-number" data-count="7227" aria-live="polite">0</span>
+                        </button>
+                        <button class="stat-card" type="button" onclick="window.open('https://sportrf.gov.ru/cartographic', '_blank', 'noopener')" aria-label="Объектов спорта: 7227. Перейти к карте объектов">
+                            <span class="stat-number" data-count="7227" aria-live="polite" aria-hidden="true">0</span>
                             <span class="stat-label">Объектов спорта</span>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-number" data-count="5386" aria-live="polite">0</span>
+                        </button>
+                        <button class="stat-card" type="button" onclick="window.open('https://sportrf.gov.ru/organizations', '_blank', 'noopener')" aria-label="Организаций спортивной подготовки: 5386. Перейти к списку организаций">
+                            <span class="stat-number" data-count="5386" aria-live="polite" aria-hidden="true">0</span>
                             <span class="stat-label">Организаций</span>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-number" data-count="2869317" aria-live="polite">0</span>
+                        </button>
+                        <button class="stat-card" type="button" onclick="window.open('https://sportrf.gov.ru/athletes', '_blank', 'noopener')" aria-label="Спортсменов: 2869317. Перейти к реестру спортсменов">
+                            <span class="stat-number" data-count="2869317" aria-live="polite" aria-hidden="true">0</span>
                             <span class="stat-label">Спортсменов</span>
-                        </div>
+                        </button>
                     </div>
                 </div>
             </section>
@@ -2878,6 +3001,43 @@
                     if (!regionInput.contains(e.target) && !regionListbox.contains(e.target)) {
                         closeRegionList();
                     }
+                });
+            }
+
+            // ===== THEME TOGGLE =====
+            const themeToggle = document.getElementById('theme-toggle');
+            const sunIcon = themeToggle?.querySelector('.sun-icon');
+            const moonIcon = themeToggle?.querySelector('.moon-icon');
+            
+            // Load saved theme from localStorage
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                if (sunIcon) sunIcon.style.display = 'none';
+                if (moonIcon) moonIcon.style.display = 'block';
+            }
+
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    const currentTheme = document.documentElement.getAttribute('data-theme');
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    
+                    document.documentElement.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                    
+                    if (sunIcon && moonIcon) {
+                        if (newTheme === 'dark') {
+                            sunIcon.style.display = 'none';
+                            moonIcon.style.display = 'block';
+                        } else {
+                            sunIcon.style.display = 'block';
+                            moonIcon.style.display = 'none';
+                        }
+                    }
+                    
+                    // Announce theme change for screen readers
+                    const themeName = newTheme === 'dark' ? 'тёмная' : 'светлая';
+                    announce(`Тема оформления переключена на ${themeName}`);
                 });
             }
         });
