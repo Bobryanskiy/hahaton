@@ -2739,10 +2739,15 @@
                 description: 'Бокс – контактный вид спорта, единоборство, в котором спортсмены наносят друг другу удары кулаками в специальных перчатках. Поединок проходит на ринге и состоит из раундов.'
             }
         };
+        let lastFocusedElement = null;
+
         function openSportModal(sportId) {
             const modal = document.getElementById('sport-modal');
             const data = sportData[sportId];
             if (data) {
+                // Сохраняем последний сфокусированный элемент
+                lastFocusedElement = document.activeElement;
+                
                 document.getElementById('modal-icon').textContent = data.icon;
                 document.getElementById('modal-title').textContent = data.title;
                 document.getElementById('modal-count').textContent = data.count;
@@ -2750,32 +2755,66 @@
                 modal.classList.add('active');
                 document.body.style.overflow = 'hidden';
                 announce('Открыто модальное окно: ' + data.title);
-                // Focus close button
+                
+                // Фокус на кнопку закрытия
                 setTimeout(() => {
                     modal.querySelector('.modal-close').focus();
                 }, 100);
+                
+                // Добавляем обработчики для ловушки фокуса и Escape
+                document.addEventListener('keydown', handleModalKeydown);
             }
         }
+        
         function closeSportModal() {
             const modal = document.getElementById('sport-modal');
             modal.classList.remove('active');
             document.body.style.overflow = '';
             announce('Модальное окно закрыто');
-        }
-        function closeModalOnOverlay(event) {
-            if (event.target === event.currentTarget) {
-                closeSportModal();
+            
+            // Удаляем обработчики
+            document.removeEventListener('keydown', handleModalKeydown);
+            
+            // Возвращаем фокус на элемент, который открыл окно
+            if (lastFocusedElement) {
+                lastFocusedElement.focus();
             }
         }
-        // Close modal on Escape key
-        document.addEventListener('keydown', function (e) {
+        
+        function handleModalKeydown(e) {
+            const modal = document.getElementById('sport-modal');
+            if (!modal.classList.contains('active')) return;
+            
+            // Закрытие по Escape
             if (e.key === 'Escape') {
-                const modal = document.getElementById('sport-modal');
-                if (modal.classList.contains('active')) {
-                    closeSportModal();
+                e.preventDefault();
+                closeSportModal();
+                return;
+            }
+            
+            // Ловушка фокуса для Tab
+            if (e.key === 'Tab') {
+                const focusableElements = modal.querySelectorAll(
+                    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+                );
+                const firstFocusable = focusableElements[0];
+                const lastFocusable = focusableElements[focusableElements.length - 1];
+                
+                if (e.shiftKey) {
+                    // Shift + Tab
+                    if (document.activeElement === firstFocusable) {
+                        e.preventDefault();
+                        lastFocusable.focus();
+                    }
+                } else {
+                    // Tab
+                    if (document.activeElement === lastFocusable) {
+                        e.preventDefault();
+                        firstFocusable.focus();
+                    }
                 }
             }
-        });
+        }
         // Make sport cards keyboard accessible
         document.querySelectorAll('.sport-card').forEach(card => {
             card.addEventListener('keydown', function (e) {
