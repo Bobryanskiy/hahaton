@@ -1992,6 +1992,10 @@
       margin-bottom: 24px;
     }
 
+    .modal-description.visually-hidden {
+      /* Keep visually hidden but still accessible to screen readers via aria-describedby */
+    }
+
     .autocomplete-wrapper {
       position: relative;
     }
@@ -2950,22 +2954,22 @@
   </footer>
 
   <div id="sport-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title"
-    onclick="closeModalOnOverlay(event)">
-    <div class="modal" onclick="event.stopPropagation()">
+    aria-describedby="modal-description" onclick="closeModalOnOverlay(event)">
+    <div class="modal" onclick="event.stopPropagation()" role="document">
       <button class="modal-close" onclick="closeSportModal()" aria-label="Закрыть модальное окно">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M18 6L6 18M6 6l12 12" />
         </svg>
       </button>
-      <div class="modal-icon" id="modal-icon">⚽</div>
+      <div class="modal-icon" id="modal-icon" aria-hidden="true">⚽</div>
       <h2 class="modal-title" id="modal-title">Футбол</h2>
       <div class="modal-info">
-        <div class="modal-info-icon">i</div>
+        <div class="modal-info-icon" aria-hidden="true">i</div>
         <div class="modal-info-text">
           Количество занимающихся спортсменов: <strong id="modal-count">280 985</strong>
         </div>
       </div>
-      <p class="modal-description" id="modal-description">
+      <p class="modal-description visually-hidden" id="modal-description" aria-live="polite">
         Футбол – вид спорта, целью в котором является забить мяч в ворота соперника большее число раз, чем это
         сделает команда соперника в установленное время. Мяч в ворота можно забивать ногами или любыми другими
         частями тела (кроме рук).
@@ -3459,9 +3463,36 @@
         document.getElementById('modal-description').textContent = data.description;
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
-        announce('Открыто модальное окно: ' + data.title);
+        
+        // Trap focus inside modal for accessibility
+        const focusableElements = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+        const firstFocusable = focusableElements[0];
+        const lastFocusable = focusableElements[focusableElements.length - 1];
+        
+        // Announce to screen readers
+        announce('Открыто модальное окно: ' + data.title + '. Нажмите Escape для закрытия.');
+        
         setTimeout(() => {
-          modal.querySelector('.modal-close').focus();
+          firstFocusable.focus();
+          
+          // Add focus trap and store reference
+          currentFocusTrapHandler = function trapFocus(e) {
+            if (e.key === 'Tab') {
+              if (e.shiftKey) {
+                if (document.activeElement === firstFocusable) {
+                  e.preventDefault();
+                  lastFocusable.focus();
+                }
+              } else {
+                if (document.activeElement === lastFocusable) {
+                  e.preventDefault();
+                  firstFocusable.focus();
+                }
+              }
+            }
+          };
+          
+          modal.addEventListener('keydown', currentFocusTrapHandler);
         }, 100);
       }
     }
@@ -3469,6 +3500,13 @@
       const modal = document.getElementById('sport-modal');
       modal.classList.remove('active');
       document.body.style.overflow = '';
+      
+      // Remove focus trap listener
+      if (currentFocusTrapHandler) {
+        modal.removeEventListener('keydown', currentFocusTrapHandler);
+        currentFocusTrapHandler = null;
+      }
+      
       announce('Модальное окно закрыто');
     }
     function closeModalOnOverlay(event) {
@@ -3476,6 +3514,10 @@
         closeSportModal();
       }
     }
+    
+    // Store reference to focus trap handler for removal
+    let currentFocusTrapHandler = null;
+    
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') {
         const modal = document.getElementById('sport-modal');
